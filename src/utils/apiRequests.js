@@ -4,9 +4,9 @@ const url = axios.create({
   baseURL: "https://nc-marketplace.herokuapp.com/api",
 });
 
-export function getItemsForSale() {
+export function getItemsForSale(limit=5, p=1) {
   return url
-    .get("/items")
+    .get(`/items?limit=${limit}&p=${p}`)
     .then(({ data }) => {
       return data;
     })
@@ -46,31 +46,61 @@ export function postItem(item) {
 }
 
 export function getUser(username) {
-  return url
-    .get(`/users/${username}`)
-    .then(({ data }) => {
-      return data;
-    })
+  return url.get(`/users/${username}`).then(({ data }) => {
+    return data;
+  });
 }
 
 export function getUserBasket(username) {
-  return url.get(`/users/${username}/basket`).then(({data}) => {
-    return data
-  }).catch(err => console.log(err))
+  return url
+    .get(`/users/${username}/basket`)
+    .then(({ data }) => {
+      return data;
+    })
+    .catch((err) => console.log(err));
 }
 
 export function getUserPurchaseHistory(username) {
-  return url.get(`/users/${username}/orders`).then(({data}) => {
-    return data
-  }).catch(err => console.log(err))
+  return url
+    .get(`/users/${username}/orders`)
+    .then(({ data }) => {
+      return data;
+    })
+    .catch((err) => console.log(err));
 }
 
-
 export function removeFromBasket(itemId, username) {
-  return url.delete(`/users/${username}/basket/${itemId}`)
+  return url.delete(`/users/${username}/basket/${itemId}`);
 }
 
 export function AddToBasket(item_id, username) {
-  const body = {item_id}
-  return url.post(`/users/${username}/basket`, body).catch(err => console.log(err))
+  const body = { item_id };
+  return url
+    .post(`/users/${username}/basket`, body)
+    .catch((err) => console.log(err));
+}
+
+export function postToOrders(item_id, username) {
+  const body = { item_id };
+  return url
+    .post(`/users/${username}/orders`, body)
+    .catch((err) => console.log(err));
+}
+
+export function getUsers() {
+  return url
+    .get(`/users`)
+    .then(({ data: { users } }) => {
+      return users;
+    })
+    .catch((err) => console.log(err));
+}
+
+export function patchUser(kudos_inc, username, avatar_url) {
+  const body = { kudos_inc, avatar_url };
+  return url
+    .patch(`/users/${username}`, body)
+    .catch((err) => {
+      console.log(err);
+    });
 }

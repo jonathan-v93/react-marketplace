@@ -15,7 +15,7 @@ export function User() {
   const [loginError, setLoginError] = useState(null);
   const [basket, setBasket] = useState([]);
   const { userDetails, setUserDetails } = useContext(UserContext);
-  const { basketDetails, setBasketDetails } = useContext(BasketContext);
+  const { setBasketDetails } = useContext(BasketContext);
   const { purchaseHistory, setPurchaseHistory } = useContext(
     PurchaseHistoryContext
   );
@@ -55,6 +55,7 @@ export function User() {
       <Link to="/user/purchaseHistory">
         <div>Purchase history {purchaseHistory.length}</div>
       </Link>
+      <Link to="/user/userList">Users</Link>
     </>
   ) : (
     <>
