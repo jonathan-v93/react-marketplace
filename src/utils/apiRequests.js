@@ -52,3 +52,25 @@ export function getUser(username) {
       return data;
     })
 }
+
+export function getUserBasket(username) {
+  return url.get(`/users/${username}/basket`).then(({data}) => {
+    return data
+  }).catch(err => console.log(err))
+}
+
+export function getUserPurchaseHistory(username) {
+  return url.get(`/users/${username}/orders`).then(({data}) => {
+    return data
+  }).catch(err => console.log(err))
+}
+
+
+export function removeFromBasket(itemId, username) {
+  return url.delete(`/users/${username}/basket/${itemId}`)
+}
+
+export function AddToBasket(item_id, username) {
+  const body = {item_id}
+  return url.post(`/users/${username}/basket`, body).catch(err => console.log(err))
+}

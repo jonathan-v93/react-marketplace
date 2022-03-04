@@ -5,26 +5,39 @@ import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SellForm } from "./components/SellForm";
 import { User } from "./components/User";
-import { Login } from "./components/Login";
 import { useState } from "react";
+import { UserContext } from '../src/contexts/UserLogin';
+import { BasketContext } from '../src/contexts/Basket';
+import { PurchaseHistoryContext } from '../src/contexts/PurchaseHistory';
+import { Basket } from './components/Basket';
+import { PurchaseHistory } from './components/PurchaseHistory';
 
 
 function App() {
-  const [username, setUsername] = useState(null)
+  const [userDetails, setUserDetails] = useState(null)
+  const [basketDetails, setBasketDetails] = useState([])
+  const [purchaseHistory, setPurchaseHistory] = useState([])
 
   return (
-    <BrowserRouter>
-      <div className="App">
-        <Header />
-        <NavBar />
-        <Routes>
-          <Route path="/" element={<ItemList />} />
-          <Route path="/user" element={<User username={username}/>} />
-          <Route path="/sell" element={<SellForm />} />
-          <Route path="/user/login" element={<Login setUsername={setUsername}/>} />
-        </Routes>
-      </div>
-    </BrowserRouter>
+    <UserContext.Provider value={{ userDetails, setUserDetails }}>
+      <BasketContext.Provider value={{ basketDetails, setBasketDetails }}>
+        <PurchaseHistoryContext.Provider value={{ purchaseHistory, setPurchaseHistory }}>
+          <BrowserRouter>
+            <div className="App">
+              <Header />
+              <NavBar />
+              <Routes>
+                <Route path="/" element={<ItemList />} />
+                <Route path="/user" element={<User />} />
+                <Route path="/sell" element={<SellForm />} />
+                <Route path="/user/basket" element={<Basket />} />
+                <Route path='/user/purchasHistory' element={<PurchaseHistory />} />
+              </Routes>
+            </div>
+          </BrowserRouter>
+        </PurchaseHistoryContext.Provider >
+      </BasketContext.Provider>
+    </UserContext.Provider>
   );
 }
 

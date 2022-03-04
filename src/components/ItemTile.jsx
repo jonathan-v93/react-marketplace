@@ -7,7 +7,6 @@ export function ItemTile({ item }) {
       <h2>{item.item_name}</h2>
           <p>{item.description}</p>
           <h4>{penceToPounds(item.price)}</h4>
-          <button>Buy One</button>
           <br />
     </div>
   );
