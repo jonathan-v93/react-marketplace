@@ -12,10 +12,8 @@ export function ArrangementButton({ setLimit, setCategory, setSortBy, setSearch 
       .then(([categoryData, {items}]) => {
         const categoryArr = categoryData.map((item) => {
           return item.category_name;
-        });
-     
+        }); 
         const sortByArr = Object.keys(items[0]);
-        console.log(sortByArr);
         setSortByOptions(sortByArr);
         setCategoryOptions(categoryArr);
       })

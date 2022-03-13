@@ -63,7 +63,7 @@ export function SellForm() {
           setCategoryError(errorMsg);
           break;
         default:
-          return
+          return;
       }
     } else {
       const errorMsg = "";
