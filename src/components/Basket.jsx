@@ -1,42 +1,46 @@
 import { BasketContext } from "../contexts/Basket";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ItemTile } from "./ItemTile";
 import { removeFromBasket, postToOrders } from "../utils/apiRequests";
 import { UserContext } from "../contexts/UserLogin";
 
 export function Basket() {
   const { basketDetails, setBasketDetails } = useContext(BasketContext);
-  const { userDetails } = useContext(UserContext);
+    const { userDetails } = useContext(UserContext);
+    const [successMsg, setSuccessMsg] = useState(null)
 
-  const handleClick = (e) => {
+  useEffect(() => {}, [basketDetails]);
+
+  const removeFromBasketClick = (e) => {
     removeFromBasket(e.target.value, userDetails.username)
       .then(() => {
-        const newBasketForDom = basketDetails.filter((item) => {
-          return item.item_id !== Number(e.target.value);
+        setBasketDetails((currentBasket) => {
+          return currentBasket.filter(
+            (item) => item.item_id !== Number(e.target.value)
+          );
         });
-        setBasketDetails(newBasketForDom);
       })
       .catch((err) => console.log(err));
   };
-
+    
   const handleBuyAllClick = () => {
     const orderPromises = basketDetails.map((item) => {
       return postToOrders(item.item_id, userDetails.username);
     });
-    return Promise.all(orderPromises)
+    const deletePromises = basketDetails.map((item) => {
+        return removeFromBasket(item.item_id, userDetails.username);
+      });
+    return Promise.all([...orderPromises, ...deletePromises])
       .then(() => {
-        const deletePromises = basketDetails.map((item) => {
-          return removeFromBasket(item.item_id, userDetails.username);
-        });
-        return Promise.all(deletePromises);
+          setBasketDetails([]);
+          setSuccessMsg('Items have been successfully bought!')
       })
-      .then(() => {
-        setBasketDetails([]);
-      })
-      .catch((err) => {
+        .catch((err) => {
+          setSuccessMsg('there has been an error, try again!')
         console.log(err);
       });
   };
+
 
   const buyAllButton = () => {
     if (basketDetails.length === 0) return null;
@@ -45,14 +49,15 @@ export function Basket() {
 
   return (
     <>
-      <h2>Basket</h2>
+          <h2>Basket</h2>
+          <div>{successMsg}</div>
       {basketDetails.map((item) => {
         return (
           <>
             <ItemTile key={item.item_id} item={item} />
             <button
               value={item.item_id}
-              onClick={handleClick}
+              onClick={removeFromBasketClick}
               key={`{item.item_id}-button`}
             >
               Remove From Basket

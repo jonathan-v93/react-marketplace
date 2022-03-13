@@ -4,9 +4,14 @@ const url = axios.create({
   baseURL: "https://nc-marketplace.herokuapp.com/api",
 });
 
-export function getItemsForSale(limit=5, p=1) {
+export function getItemsForSale(limit = 5, p = 1, sortBy, search, category) {
+  let pathStr = `/items?limit=${limit}&p=${p}`;
+  if (sortBy) pathStr += `&sort_by=${sortBy}`;
+  if (category) pathStr += `&category_name=${category}`;
+  if (search) pathStr += `&search=${search}`;
+
   return url
-    .get(`/items?limit=${limit}&p=${p}`)
+    .get(pathStr)
     .then(({ data }) => {
       return data;
     })
@@ -103,4 +108,10 @@ export function patchUser(kudos_inc, username, avatar_url) {
     .catch((err) => {
       console.log(err);
     });
+}
+
+export function getCategories() {
+  return url.get('/categories').then(({ data: { categories } }) => {
+    return categories
+  }).catch(err => console.log(err));
 }

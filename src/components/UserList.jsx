@@ -43,7 +43,7 @@ export function UserList() {
       {users.map((user) => {
         return (
           <>
-            <UserTile user={user} />
+            <UserTile key={user} user={user} />
             <button
               username={user.username}
               avatar_url={user.avatar_url}

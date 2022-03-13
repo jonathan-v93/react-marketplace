@@ -8,6 +8,7 @@ export function SellForm() {
   const [itemImgUrl, setitemImgUrl] = useState("");
   const [itemPrice, setItemPrice] = useState("");
   const [itemCategory, setItemCategory] = useState("");
+  const [uploadSuccessfull, setUploadSuccessfull] = useState(false);
   //error states:
   const [nameError, setNameError] = useState(null);
   const [descriptionError, setDescriptionError] = useState(null);
@@ -25,6 +26,7 @@ export function SellForm() {
       category_name: itemCategory,
     };
     postItem(info);
+    setUploadSuccessfull(true)
   };
 
   const urlValidation = (e) => {
@@ -59,8 +61,9 @@ export function SellForm() {
           break;
         case "category":
           setCategoryError(errorMsg);
-        default:
           break;
+        default:
+          return
       }
     } else {
       const errorMsg = "";
@@ -79,13 +82,14 @@ export function SellForm() {
           break;
         case "category":
           setCategoryError(errorMsg);
-        default:
           break;
+        default:
+          return;
       }
     }
   };
 
-  return (
+  return uploadSuccessfull ? <h2>Post succesfully submitted!</h2> : (
     <form onSubmit={handleSubmit}>
       <ul>
         <li>

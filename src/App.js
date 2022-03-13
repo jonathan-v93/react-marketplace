@@ -13,10 +13,23 @@ import { Basket } from "./components/Basket";
 import { PurchaseHistory } from "./components/PurchaseHistory";
 import { UserList } from "./components/UserList";
 
+import ReactGA from 'react-ga';
+ReactGA.initialize('306740053', {
+  gaOptions: {
+    siteSpeedSampleRate: 100,
+    userId: 2345,
+    debug: true,
+    alwaysSendToDefaultTracker: true
+  }
+});
+ReactGA.pageview(window.location.pathname + window.location.search);
+
 function App() {
   const [userDetails, setUserDetails] = useState(null);
   const [basketDetails, setBasketDetails] = useState([]);
   const [purchaseHistory, setPurchaseHistory] = useState([]);
+
+
 
   return (
     <UserContext.Provider value={{ userDetails, setUserDetails }}>
